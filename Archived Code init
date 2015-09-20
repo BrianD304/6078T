@@ -1,0 +1,111 @@
+
+
+
+
+void initialize() {
+	imeInitializeAll();
+	usartInit(uart1, 115200, SERIAL_8N1);
+	lcdInit(LCD );
+	lcdClear(LCD );
+	delay(20);
+	lcdSetBacklight(LCD, true);
+	lcdSetText(LCD, 1, "Loading...");
+	delay(1000);
+	lcdClear(LCD );
+	delay(20);
+	lcdSetText(LCD, 1, "Robo-Plugs");
+	delay(1000);
+	lcdSetText(LCD, 2, "Team 6078T");
+	delay(2000);
+
+	int LCDButtons = 0;
+
+	void waitForPress() {
+		while (LCDButtons == 0) {
+			if (lcdReadButtons(LCD ) == LCD_BTN_LEFT)
+				LCDButtons = LCD_BTN_LEFT;
+			else if (lcdReadButtons(LCD ) == LCD_BTN_CENTER)
+				LCDButtons = LCD_BTN_CENTER;
+			else if (lcdReadButtons(LCD ) == LCD_BTN_RIGHT)
+				LCDButtons = LCD_BTN_RIGHT;
+			else
+				LCDButtons = 0;
+		}
+		delay(20);
+	}
+
+	void waitForRelease() {
+		while (LCDButtons != 0) {
+		}
+		delay(20);
+	}
+
+	void autoselect() {
+		int count;
+		lcdClear(LCD );
+		while (LCDButtons != LCD_BTN_CENTER) {
+			switch (count) {
+			case 0:
+				lcdSetText(LCD, 1, "Autonomous 1");
+				lcdSetText(LCD, 2, "<   Enter   >");
+				waitForPress();
+				if (LCDButtons == LCD_BTN_LEFT) {
+					waitForRelease();
+					count = 3;
+					LCDButtons = 0;
+				} else if (LCDButtons == LCD_BTN_RIGHT) {
+					waitForRelease();
+					count++;
+					LCDButtons = 0;
+				}
+				break;
+			case 1:
+				lcdSetText(LCD, 1, "Autonomous 2");
+				lcdSetText(LCD, 2, "<   Enter   >");
+				waitForPress();
+				if (LCDButtons == LCD_BTN_LEFT) {
+					waitForRelease();
+					count--;
+					LCDButtons = 0;
+				} else if (LCDButtons == LCD_BTN_RIGHT) {
+					waitForRelease();
+					count++;
+					LCDButtons = 0;
+				}
+				break;
+			case 2:
+				lcdSetText(LCD, 1, "Autonomous 3");
+				lcdSetText(LCD, 2, "<   Enter   >");
+				waitForPress();
+				if (LCDButtons == LCD_BTN_LEFT) {
+					waitForRelease();
+					count--;
+					LCDButtons = 0;
+				} else if (LCDButtons == LCD_BTN_RIGHT) {
+					waitForRelease();
+					count++;
+					LCDButtons = 0;
+				}
+				break;
+			case 3:
+				lcdSetText(LCD, 1, "Autonomous 4");
+				lcdSetText(LCD, 2, "<   Enter   >");
+				waitForPress();
+				if (LCDButtons == LCD_BTN_LEFT) {
+					waitForRelease();
+					count--;
+					LCDButtons = 0;
+				} else if (LCDButtons == LCD_BTN_RIGHT) {
+					waitForRelease();
+					count = 0;
+					LCDButtons = 0;
+				}
+				break;
+			default:
+				count = 0;
+				LCDButtons = 0;
+				break;
+			}
+		}
+	}
+}
